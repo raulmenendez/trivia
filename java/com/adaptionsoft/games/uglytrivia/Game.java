@@ -2,6 +2,7 @@ package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Game {
     ArrayList players = new ArrayList();
@@ -42,7 +43,6 @@ public class Game {
 
 	public boolean add(String playerName) {
 		
-		
 	    players.add(playerName);
 	    places[howManyPlayers()] = 0;
 	    purses[howManyPlayers()] = 0;
@@ -61,41 +61,45 @@ public class Game {
 	public int howManyPlayers() {
 		return players.size();
 	}
+	
+	public int rollTheDice(Random dice){
+		return (dice.nextInt(5) + 1);
+	}
 
-	public void roll(int roll) {
-		System.out.println(players.get(currentPlayer) + " is the current player");
-		System.out.println("They have rolled a " + roll);
+	public boolean isUserInThePenaltyBox(){
+		return inPenaltyBox[currentPlayer];			
+	}	
+	
+	public boolean isUserGettingOutFromPenaltyBox(int roll){
+		return (roll % 2 != 0);
+	}
+
+	
+	public void askTheQuestion(int roll) {
 		
-		if (inPenaltyBox[currentPlayer]) {
-			if (roll % 2 != 0) {
+		if (isUserInThePenaltyBox()){
+			if (isUserGettingOutFromPenaltyBox(roll)){				
 				isGettingOutOfPenaltyBox = true;
-				
-				System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-				places[currentPlayer] = places[currentPlayer] + roll;
-				if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-				
-				System.out.println(players.get(currentPlayer) 
-						+ "'s new location is " 
-						+ places[currentPlayer]);
-				System.out.println("The category is " + currentCategory());
-				askQuestion();
+				play(roll);
 			} else {
-				System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
 				isGettingOutOfPenaltyBox = false;
-				}
-			
-		} else {
-		
-			places[currentPlayer] = places[currentPlayer] + roll;
-			if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-			
-			System.out.println(players.get(currentPlayer) 
-					+ "'s new location is " 
-					+ places[currentPlayer]);
-			System.out.println("The category is " + currentCategory());
-			askQuestion();
+			}
+		}else{			
+			play(roll);
 		}
 		
+	}
+
+	protected void play(int roll) {
+		movePlaces(roll);
+		askQuestion();
+	}
+
+	private void movePlaces(int roll) {
+		places[currentPlayer] = places[currentPlayer] + roll;
+		if (places[currentPlayer] > 11){ 
+			places[currentPlayer] = places[currentPlayer] - 12;
+		}
 	}
 
 	private void askQuestion() {
