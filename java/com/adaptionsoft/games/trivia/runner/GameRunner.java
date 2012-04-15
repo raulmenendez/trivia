@@ -9,32 +9,27 @@ public class GameRunner {
 
 	private static boolean notAWinner;
 
-	public static void main(String[] args) {
-		Game aGame = new Game();
-		
-		aGame.add("Chet");
-		aGame.add("Pat");
-		aGame.add("Sue");
-		
-		Random rand = new Random();
-	
-		play(aGame, rand);
-		
-	}
-
-	protected static void play(Game aGame, Random rand) {
+	protected static void play(Game game, Random rand) {
 		do {
 			
-			aGame.roll(rand.nextInt(5) + 1);
+			int roll = game.rollTheDice(rand);
+			game.askTheQuestion(roll);
 			
-			if (rand.nextInt(9) == 7) {
-				notAWinner = aGame.wrongAnswer();
+			if (isACorrectAnswerExpected(rand)) {
+				notAWinner = game.wasCorrectlyAnswered();
 			} else {
-				notAWinner = aGame.wasCorrectlyAnswered();
+				notAWinner = game.wrongAnswer();				
 			}
 			
-			
-			
-		} while (notAWinner);
+		} while (gameIsNotFinished(rand));
 	}
+
+	private static boolean isACorrectAnswerExpected(Random rand) {
+		return rand.nextInt(9) != 7;
+	}
+	
+	private static boolean gameIsNotFinished(Random rand) {		
+		return notAWinner;
+	}
+	
 }

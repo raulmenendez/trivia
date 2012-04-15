@@ -5,8 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.junit.Before;
@@ -110,7 +108,6 @@ public class GameRunnerTest {
 	}
 	
 	private void setUpPlayersToPlay(Game gameSpy,int numberOfPlayers){
-		List<String> playerNames = new ArrayList<String>();
 		for (int player=1;player<=numberOfPlayers;player++){
 			gameSpy.add("Player".concat(String.valueOf(player)));	
 		}
