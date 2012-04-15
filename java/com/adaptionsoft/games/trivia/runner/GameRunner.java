@@ -9,26 +9,40 @@ public class GameRunner {
 
 	private static boolean notAWinner;
 
-	protected static void play(Game game, Random rand) {
+	public static void play(Game game, Random rand) throws MinimumPlayersException {
+
+		if (isGamePayable(game)){
+			playGame(game, rand);
+		}else{
+			throw new MinimumPlayersException();
+		}
+		
+	}
+
+	private static void playGame(Game game, Random rand) {
 		do {
 			
-			int roll = game.rollTheDice(rand);
-			game.askTheQuestion(roll);
+			int diceResult = game.rollTheDice(rand);
+			game.roll(diceResult);
 			
 			if (isACorrectAnswerExpected(rand)) {
 				notAWinner = game.wasCorrectlyAnswered();
 			} else {
 				notAWinner = game.wrongAnswer();				
 			}
-			
-		} while (gameIsNotFinished(rand));
+						
+		} while (gameIsNotFinished());
+	}
+
+	private static boolean isGamePayable(Game game) {
+		return game.isPlayable();
 	}
 
 	private static boolean isACorrectAnswerExpected(Random rand) {
 		return rand.nextInt(9) != 7;
 	}
 	
-	private static boolean gameIsNotFinished(Random rand) {		
+	private static boolean gameIsNotFinished() {		
 		return notAWinner;
 	}
 	
