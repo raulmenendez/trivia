@@ -3,15 +3,12 @@ package com.adaptionsoft.games.uglytrivia;
 import java.util.ArrayList;
 
 public class Players {
+	
 	private int number_of_players = 6;
-	private ArrayList players = new ArrayList() ;
+	private ArrayList<String> players = new ArrayList<String>() ;
 	private int[] places = new int[number_of_players];
 	private int[] purses = new int[number_of_players];
 	private boolean[] inPenaltyBox = new boolean[number_of_players];
-	private int[] highscores = new int[number_of_players];
-	
-	public Players() {
-	}
 
 	public boolean addPlayer(String playerName) {		
 		
@@ -24,13 +21,7 @@ public class Players {
 	    System.out.println(Messages.getString("Text.5") + getPlayers().size()); //$NON-NLS-1$
 		return true;
 	}
-	
-	public boolean remove(String playerName) {		
-//		  getPlayers().remove(howManyPlayers());
-		  getPlayers().remove(getPlayers().indexOf(playerName));
-		  return true;
-	}
-	
+
 	public int howManyPlayers() {
 		return getPlayers().size();
 	}
@@ -46,47 +37,21 @@ public class Players {
 		return number_of_players;
 	}
 
-	public void setNumber_of_players(int number_of_players) {
-		this.number_of_players = number_of_players;
-	}
-
-	public ArrayList getPlayers() {
+	public ArrayList<String> getPlayers() {
 		return players;
-	}
-
-	public void setPlayers(ArrayList players) {
-		this.players = players;
 	}
 
 	public int[] getPlaces() {
 		return places;
 	}
 
-	public void setPlaces(int[] places) {
-		this.places = places;
-	}
-
 	public int[] getPurses() {
 		return purses;
 	}
 
-	public void setPurses(int[] purses) {
-		this.purses = purses;
-	}
 
 	public boolean[] getInPenaltyBox() {
 		return inPenaltyBox;
 	}
 
-	public void setInPenaltyBox(boolean[] inPenaltyBox) {
-		this.inPenaltyBox = inPenaltyBox;
-	}
-
-	public int[] getHighscores() {
-		return highscores;
-	}
-
-	public void setHighscores(int[] highscores) {
-		this.highscores = highscores;
-	}
 }

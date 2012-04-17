@@ -1,12 +1,14 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class Game {
 	
-	//Esto debería llegar por factoria
+
     Questions questions = new Questions();
     Players players;
+    private HashMap<String, Integer> playersScores = new HashMap<String, Integer>();
 	int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
@@ -57,10 +59,6 @@ public class Game {
 		return players.getPlaces()[currentPlayer];
 	}
 	
-  public static void main(String[] args) {
-    System.out.println(Messages.getString("Text.18")); // Display the string. //$NON-NLS-1$
-  }
-
 	// randomly return a category
 	private String currentCategory() {
 		if (placeFrom(currentPlayer) == 0) return Messages.getString("Text.14"); //$NON-NLS-1$
@@ -75,37 +73,19 @@ public class Game {
 		return Messages.getString("Text.17"); //$NON-NLS-1$
 	}
 
-	public boolean wasCorrectlyAnswered() {
-		if (isPlayerInThePenaltyBox()){
-			if (isGettingOutOfPenaltyBox) {
-				System.out.println(Messages.getString("Text.29")); //$NON-NLS-1$
-				players.getPurses()[currentPlayer]++;
-				System.out.println(players.getPlayers().get(currentPlayer) 
-						+ Messages.getString("Text.30") //$NON-NLS-1$
-						+ players.getPurses()[currentPlayer]
-						+ Messages.getString("Text.31")); //$NON-NLS-1$
-				
-				boolean winner = players.didPlayerWin(currentPlayer);
-				currentPlayer = nextPlayerToPlay();
-				return winner;
-			} else {
-				currentPlayer = nextPlayerToPlay();
-				return true;
-			}
-			
-		} else {
+	private boolean winnerTreatment(){
+		System.out.println(Messages.getString("Text.29")); //$NON-NLS-1$
+		players.getPurses()[currentPlayer]++;
+		System.out.println(players.getPlayers().get(currentPlayer) 
+				+ Messages.getString("Text.30") //$NON-NLS-1$
+				+ players.getPurses()[currentPlayer]
+				+ Messages.getString("Text.31")); //$NON-NLS-1$
 		
-			System.out.println(Messages.getString("Text.29")); //$NON-NLS-1$
-			players.getPurses()[currentPlayer]++;
-			System.out.println(players.getPlayers().get(currentPlayer) 
-					+ Messages.getString("Text.30") //$NON-NLS-1$
-					+ players.getPurses()[currentPlayer]
-					+ Messages.getString("Text.31")); //$NON-NLS-1$
-			
-			boolean winner = players.didPlayerWin(currentPlayer);
-			currentPlayer = nextPlayerToPlay();
-			return winner;
-		}
+		playersScores.put(players.getPlayers().get(currentPlayer),players.getPurses()[currentPlayer]);
+		
+		boolean winner = players.didPlayerWin(currentPlayer);
+		currentPlayer = nextPlayerToPlay();
+		return winner;
 	}
 
 	private int nextPlayerToPlay() {
@@ -114,6 +94,19 @@ public class Game {
 			currentPlayer = 0;
 		}
 		return currentPlayer;
+	}
+	
+	public boolean wasCorrectlyAnswered() {
+		if (players.getInPenaltyBox()[currentPlayer]){
+			if (isGettingOutOfPenaltyBox) {
+				return winnerTreatment();
+			} else {
+				currentPlayer = nextPlayerToPlay();
+				return true;
+			}			
+		} else {				
+			return winnerTreatment();
+		}
 	}
 	
 	public boolean wrongAnswer(){
@@ -126,11 +119,17 @@ public class Game {
 		return true;
 	}
     
-	public Players getPlayers() {
-		return players;
-	}
-
 	public void setPlayers(Players players) {
 		this.players = players;
-	}	
+	}
+	
+	public HashMap<String, Integer> getPlayersScores(){
+		return playersScores;
+	}
+	
+	public int getScoreFrom(String player){
+		return this.playersScores.get(player).intValue();
+	}
+	
+	
 }

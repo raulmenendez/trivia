@@ -4,10 +4,10 @@ import java.util.LinkedList;
 
 public class Questions {
 
-	public LinkedList popQuestions = new LinkedList ();
-	public LinkedList scienceQuestions = new LinkedList ();
-	public LinkedList sportsQuestions = new LinkedList ();
-	public LinkedList rockQuestions = new LinkedList ();
+	public LinkedList<String> popQuestions = new LinkedList<String> ();
+	public LinkedList<String> scienceQuestions = new LinkedList<String> ();
+	public LinkedList<String> sportsQuestions = new LinkedList<String> ();
+	public LinkedList<String> rockQuestions = new LinkedList<String> ();
 
 	public Questions(){
 		for (int i = 0; i < 50; i++) {
@@ -22,7 +22,7 @@ public class Questions {
 		return Messages.getString(message) + index; 
 	}
 	
-	public LinkedList getPopQuestions() {
+	public LinkedList<?> getPopQuestions() {
 		return popQuestions;
 	}	
 
@@ -39,31 +39,31 @@ public class Questions {
 			return "";
 	}
 
-	public void setPopQuestions(LinkedList popQuestions) {
+	public void setPopQuestions(LinkedList<String> popQuestions) {
 		this.popQuestions = popQuestions;
 	}
 
-	public LinkedList getScienceQuestions() {
+	public LinkedList<?> getScienceQuestions() {
 		return scienceQuestions;
 	}
 
-	public void setScienceQuestions(LinkedList scienceQuestions) {
+	public void setScienceQuestions(LinkedList<String> scienceQuestions) {
 		this.scienceQuestions = scienceQuestions;
 	}
 
-	public LinkedList getSportsQuestions() {
+	public LinkedList<?> getSportsQuestions() {
 		return sportsQuestions;
 	}
 
-	public void setSportsQuestions(LinkedList sportsQuestions) {
+	public void setSportsQuestions(LinkedList<String> sportsQuestions) {
 		this.sportsQuestions = sportsQuestions;
 	}
 
-	public LinkedList getRockQuestions() {
+	public LinkedList<String> getRockQuestions() {
 		return rockQuestions;
 	}
 
-	public void setRockQuestions(LinkedList rockQuestions) {
+	public void setRockQuestions(LinkedList<String> rockQuestions) {
 		this.rockQuestions = rockQuestions;
 	}
 }
