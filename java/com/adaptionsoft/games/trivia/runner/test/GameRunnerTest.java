@@ -4,16 +4,24 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.adaptionsoft.games.trivia.runner.GameRunner;
 import com.adaptionsoft.games.trivia.runner.MinimumPlayersException;
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.Historic;
 import com.adaptionsoft.games.uglytrivia.Players;
 
 public class GameRunnerTest {
@@ -22,6 +30,33 @@ public class GameRunnerTest {
 	private Game gameSpy;
 	private Random randomMock;
 	private Players players;
+	private static Historic historic;
+	
+	
+
+	@BeforeClass
+	public static void SetUpClass(){        
+		try{
+			ObjectInputStream entrada=new ObjectInputStream(new FileInputStream("historic.obj"));
+	        historic=(Historic)entrada.readObject();
+	        historic.printResults();
+		}catch (FileNotFoundException ex){
+	    	System.out.println("No existe historico de puntuaciones, se crea");
+	    	try{
+	    		historic = new Historic();
+		    	ObjectOutputStream salida=new ObjectOutputStream(new FileOutputStream("historic.obj"));
+	            salida.writeObject(historic);
+	            salida.close();
+	    	}catch (IOException exc) {
+		        System.out.println(exc);	    
+		    }
+		}catch (IOException ex) {
+	        System.out.println(ex);
+	    }catch (ClassNotFoundException ex) {
+	        System.out.println(ex);	    
+	    }
+	}
+	
 	
 	@Before
 	public void setUp() throws Exception {
@@ -29,7 +64,8 @@ public class GameRunnerTest {
 		gameSpy = spy(new Game());
 		outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
-		players = new Players(); 
+		players = new Players();
+		
 	}
 	
 	@Test(expected=MinimumPlayersException.class)
@@ -109,7 +145,32 @@ public class GameRunnerTest {
 		verify(gameSpy,times(2)).wrongAnswer();
 		verify(gameSpy,times(16)).wasCorrectlyAnswered();
 	}
-	
+
+	@Test
+	public void validate_scores_one_play_for_player_one_and_all_answers_ok_has_6_gold_coins() throws MinimumPlayersException {				
+		when(randomMock.nextInt(5)).thenReturn(0);
+		when(randomMock.nextInt(9)).thenReturn(2);
+		
+		gameSpy.setPlayers(setUpPlayersToPlay(2));
+		GameRunner.play(gameSpy, randomMock);
+
+		historic.addPlayersScores(gameSpy.getPlayersScores());
+		
+		assertEquals(6,gameSpy.getPlayersScores().get("Player1").intValue());
+	}
+
+	@Test
+	public void validate_scores_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException {
+		
+		when(randomMock.nextInt(9)).thenReturn(7).thenReturn(7).thenReturn(1);
+		
+		gameSpy.setPlayers(setUpPlayersToPlay(3));
+		GameRunner.play(gameSpy, randomMock);				
+
+		historic.addPlayersScores(gameSpy.getPlayersScores());
+		assertNotNull(gameSpy.getPlayersScores());
+	}
+
 	private Players setUpPlayersToPlay(int numberOfPlayers){
 		for (int player=1;player<=numberOfPlayers;player++){
 			players.addPlayer("Player".concat(String.valueOf(player)));
