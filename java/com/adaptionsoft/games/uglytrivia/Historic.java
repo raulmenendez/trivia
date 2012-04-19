@@ -1,5 +1,11 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,7 +49,41 @@ public class Historic implements Serializable{
 		}		
 	}	
 	
-	public int getScoreFrom(String player){
-		return this.historicInfo.get(player).intValue();
+	public int getScoreFrom(String player) throws NotAValidPlayerException{
+		if (this.historicInfo.containsKey(player)){
+			return this.historicInfo.get(player).intValue();
+		}else{
+			throw new NotAValidPlayerException();
+		}
 	}
+	
+	public Historic readSerialized(){
+		Historic historic = null;
+		try{
+			ObjectInputStream entrada=new ObjectInputStream(new FileInputStream("historic.obj"));
+	        historic=(Historic)entrada.readObject();
+	        historic.printResults();
+		}catch (FileNotFoundException ex){
+			createSerialized();
+		}catch (IOException ex) {
+	        System.out.println(ex);
+	    }catch (ClassNotFoundException ex) {
+	        System.out.println(ex);	    
+	    }	
+	    
+	    return historic;
+	}
+	
+	public void createSerialized(){
+		System.out.println("No existe historico de puntuaciones, se crea");
+    	try{
+    		Historic historic = new Historic();
+	    	ObjectOutputStream salida=new ObjectOutputStream(new FileOutputStream("historic.obj"));
+            salida.writeObject(historic);
+            salida.close();
+    	}catch (IOException exc) {
+	        System.out.println(exc);	    
+	    }		
+	}
+	
 }

@@ -37,26 +37,9 @@ public class GameRunnerTest {
 	private static Historic historic;
 
 	@BeforeClass
-	public static void SetUpClass(){        
-		try{
-			ObjectInputStream input=new ObjectInputStream(new FileInputStream("historic.obj"));
-	        historic=(Historic)input.readObject();
-	        historic.printResults();
-		}catch (FileNotFoundException ex){
-	    	System.out.println("No existe historico de puntuaciones, se crea");
-	    	try{
-	    		historic = new Historic();
-		    	ObjectOutputStream salida=new ObjectOutputStream(new FileOutputStream("historic.obj"));
-	            salida.writeObject(historic);
-	            salida.close();
-	    	}catch (IOException exc) {
-		        System.out.println(exc);	    
-		    }
-		}catch (IOException ex) {
-	        System.out.println(ex);
-	    }catch (ClassNotFoundException ex) {
-	        System.out.println(ex);	    
-	    }
+	public static void SetUpClass(){
+		historic = new Historic();
+		historic.readSerialized();
 	}
 	
 	@Before
