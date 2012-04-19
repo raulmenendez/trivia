@@ -6,7 +6,7 @@ import java.util.Random;
 public class Game {
 	
 
-    Questions questions = new Questions();
+	Questions questions = new Questions(50);
     Players players;
     private HashMap<String, Integer> playersScores = new HashMap<String, Integer>();
 	int currentPlayer = 0;
