@@ -60,15 +60,8 @@ public class GameRunnerTest {
 	@Test(expected=MinimumPlayersException.class)
 	public void a_game_with_only_one_player() throws MinimumPlayersException {
 		
-		when(randomMock.nextInt(5)).thenReturn(0);
-		when(randomMock.nextInt(9)).thenReturn(2);
-		
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
 		GameRunner.play(gameSpy, randomMock);
-
-		assertEquals(true,outContent.toString().contains("Player1 now has 6 Gold Coins."));
-		verify(gameSpy,times(0)).wrongAnswer();
-		verify(gameSpy,times(6)).wasCorrectlyAnswered();
 		
 	}
 	
