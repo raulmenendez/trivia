@@ -61,7 +61,7 @@ public class GameTest {
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
 		gameSpy.setQuestions(questions);
 		
-		gameSpy.wrongAnswer();		
+		gameSpy.wasIncorrectlyAnswered();		
 		int roll = gameSpy.rollTheDice(randomMock);		
 		gameSpy.turn(roll);
 		
@@ -76,7 +76,7 @@ public class GameTest {
 		
 		when(randomMock.nextInt(5)).thenReturn(1);
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
-		gameSpy.wrongAnswer();
+		gameSpy.wasIncorrectlyAnswered();
 		int roll = gameSpy.rollTheDice(randomMock);
 		
 		gameSpy.turn(roll);

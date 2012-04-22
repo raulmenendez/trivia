@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Players {
 	
+	public static final int MIN_NUMBER_PLAYERS = 2;
 	private static int MAX_NUMBER_PLAYERS = 6;
 	private ArrayList<String> players = new ArrayList<String>() ;
 	private int[] places = new int[MAX_NUMBER_PLAYERS];
@@ -34,13 +35,14 @@ public class Players {
 		return getPlayers().size();
 	}
 	
-	/**
-	 * Tells if the last player won.
-	 */
 	public boolean didPlayerWin(int currentPlayer) {
 		return (this.purses[currentPlayer] == MAX_NUMBER_PLAYERS);
 	}
 
+	public String get(int currentPlayer){
+		return this.players.get(currentPlayer);
+	}
+	
 	public ArrayList<String> getPlayers() {
 		return this.players;
 	}

@@ -29,7 +29,7 @@ public class GameRunner {
 			if (isACorrectAnswerExpected(rand)) {
 				winnerPlayer = game.wasCorrectlyAnswered();
 			} else {
-				winnerPlayer = game.wrongAnswer();				
+				winnerPlayer = game.wasIncorrectlyAnswered();				
 			}
 						
 		} while (!isGameFinished());

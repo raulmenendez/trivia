@@ -14,8 +14,8 @@ public class Game {
     boolean isGettingOutOfPenaltyBox;
 
 	public boolean isPlayable() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
-		if (players.getNumberOfPlayers() < 2) throw new MinimumPlayersException();
-		if (questions.getNumberQuestions() < 2) throw new MinimumQuestionsException();
+		if (players.getNumberOfPlayers() < Players.MIN_NUMBER_PLAYERS) throw new MinimumPlayersException();
+		if (questions.getNumberQuestions() < Questions.MIN_NUMBER_QUESTIONS) throw new MinimumQuestionsException();
 		return true;
 	}
 
@@ -78,14 +78,13 @@ public class Game {
 
 	private boolean hasPlayerWon(){
 		System.out.println(Messages.getString("Text.29")); //$NON-NLS-1$
-		players.getPurses()[currentPlayer]++;
-		//players.addPurseTo(currentPlayer);
-		System.out.println(players.getPlayers().get(currentPlayer) 
+		players.addPurseTo(currentPlayer);
+		System.out.println(players.get(currentPlayer) 
 				+ Messages.getString("Text.30") //$NON-NLS-1$
 				+ players.getPurses()[currentPlayer]
 				+ Messages.getString("Text.31")); //$NON-NLS-1$
 		
-		playersScores.put(players.getPlayers().get(currentPlayer),players.getPurses()[currentPlayer]);
+		playersScores.put(players.get(currentPlayer),players.getPurses()[currentPlayer]);
 		
 		boolean hasPlayerWon = players.didPlayerWin(currentPlayer);
 		if (!hasPlayerWon){
@@ -115,13 +114,13 @@ public class Game {
 		}
 	}
 	
-	public boolean wrongAnswer(){
+	public boolean wasIncorrectlyAnswered(){
 		System.out.println(Messages.getString("Text.35")); //$NON-NLS-1$
-		System.out.println(players.getPlayers().get(currentPlayer)+ Messages.getString("Text.36")); //$NON-NLS-1$
+		System.out.println(players.get(currentPlayer)+ Messages.getString("Text.36")); //$NON-NLS-1$
 		players.getInPenaltyBox()[currentPlayer] = true;
 		
 		currentPlayer++;
-		if (currentPlayer == players.getPlayers().size()) currentPlayer = 0;
+		if (currentPlayer == players.getNumberOfPlayers()) currentPlayer = 0;
 		return false;
 	}
     

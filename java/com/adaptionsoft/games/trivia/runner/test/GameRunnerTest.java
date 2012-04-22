@@ -101,7 +101,7 @@ public class GameRunnerTest {
 		
 		assertEquals(true,outContent.toString().contains("Player1 was sent to the penalty box"));
 		assertEquals(true,outContent.toString().contains("Player2 now has 6 Gold Coins."));
-		verify(gameSpy,times(1)).wrongAnswer();	
+		verify(gameSpy,times(1)).wasIncorrectlyAnswered();	
 		verify(gameSpy,times(11)).wasCorrectlyAnswered();
 	}
 	
@@ -115,7 +115,7 @@ public class GameRunnerTest {
 		GameRunner.play(gameSpy, randomSpy);
 		
 		assertEquals(true,outContent.toString().contains("Player1 now has 6 Gold Coins."));		
-		verify(gameSpy,times(0)).wrongAnswer();
+		verify(gameSpy,times(0)).wasIncorrectlyAnswered();
 		verify(gameSpy,times(16)).wasCorrectlyAnswered();
 	}
 	
@@ -129,7 +129,7 @@ public class GameRunnerTest {
 		GameRunner.play(gameSpy, randomSpy);
 		
 		assertEquals(true,outContent.toString().contains("Player2 now has 6 Gold Coins."));		
-		verify(gameSpy,times(1)).wrongAnswer();	
+		verify(gameSpy,times(1)).wasIncorrectlyAnswered();	
 		verify(gameSpy,times(16)).wasCorrectlyAnswered();
 	}
 	
@@ -143,7 +143,7 @@ public class GameRunnerTest {
 		GameRunner.play(gameSpy, randomSpy);				
 		
 		assertEquals(true,outContent.toString().contains("Player3 now has 6 Gold Coins."));		
-		verify(gameSpy,times(2)).wrongAnswer();
+		verify(gameSpy,times(2)).wasIncorrectlyAnswered();
 		verify(gameSpy,times(16)).wasCorrectlyAnswered();
 	}
 	

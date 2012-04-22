@@ -9,7 +9,8 @@ public class Questions {
 	public LinkedList<String> sportsQuestions = new LinkedList<String> ();
 	public LinkedList<String> rockQuestions = new LinkedList<String> ();
 	private int numberQuestions = 0;
-
+	public static int MIN_NUMBER_QUESTIONS = 2;
+	
 	public void setNumberQuestions(int numberOfQuestions){
 		this.numberQuestions = numberOfQuestions;
 		createQuestions();
