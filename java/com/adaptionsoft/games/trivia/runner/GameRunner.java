@@ -3,18 +3,18 @@ package com.adaptionsoft.games.trivia.runner;
 import java.util.Random;
 
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.MinimumPlayersException;
+import com.adaptionsoft.games.uglytrivia.MinimumQuestionsException;
 
 
 public class GameRunner {
 
 	private static boolean notAWinner;
 
-	public static void play(Game game, Random rand) throws MinimumPlayersException {
+	public static void play(Game game, Random rand) throws MinimumPlayersException, MinimumQuestionsException {
 
-		if (isGamePayable(game)){
+		if (isGamePlayable(game)){ 
 			playGame(game, rand);
-		}else{
-			throw new MinimumPlayersException();
 		}
 		
 	}
@@ -22,8 +22,8 @@ public class GameRunner {
 	private static void playGame(Game game, Random rand) {
 		do {
 			
-			int diceResult = game.rollTheDice(rand);
-			game.roll(diceResult);
+			int diceValue = game.rollTheDice(rand);
+			game.turn(diceValue);
 			
 			if (isACorrectAnswerExpected(rand)) {
 				notAWinner = game.wasCorrectlyAnswered();
@@ -34,7 +34,7 @@ public class GameRunner {
 		} while (gameIsNotFinished());
 	}
 
-	private static boolean isGamePayable(Game game) {
+	private static boolean isGamePlayable(Game game) throws MinimumPlayersException, MinimumQuestionsException {
 		return game.isPlayable();
 	}
 

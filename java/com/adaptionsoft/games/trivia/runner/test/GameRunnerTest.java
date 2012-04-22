@@ -9,24 +9,21 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.util.Random;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.adaptionsoft.games.trivia.runner.GameRunner;
-import com.adaptionsoft.games.trivia.runner.MinimumPlayersException;
 import com.adaptionsoft.games.uglytrivia.Game;
 import com.adaptionsoft.games.uglytrivia.Historic;
+import com.adaptionsoft.games.uglytrivia.MinimumPlayersException;
+import com.adaptionsoft.games.uglytrivia.MinimumQuestionsException;
 import com.adaptionsoft.games.uglytrivia.Players;
+import com.adaptionsoft.games.uglytrivia.Questions;
 
 public class GameRunnerTest {
 
@@ -35,6 +32,7 @@ public class GameRunnerTest {
 	private Random randomMock;
 	private Players players;
 	private static Historic historic;
+	private Questions questions;
 
 	@BeforeClass
 	public static void SetUpClass(){
@@ -46,19 +44,37 @@ public class GameRunnerTest {
 	public void setUp() throws Exception {
 		randomMock = mock(Random.class);
 		gameSpy = spy(new Game());
+		questions = new Questions();
+		questions.setNumberQuestions(50);
+		gameSpy.setQuestions(questions);
 		outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		players = new Players(); 
 	}
 	
+	@AfterClass
+	public static void afterExecution(){
+		historic.printResults();
+		historic.createSerialized();
+	}
+	
 	@Test(expected=MinimumPlayersException.class)
-	public void a_game_with_no_players_at_all() throws MinimumPlayersException {	
+	public void a_game_with_no_players_at_all() throws MinimumPlayersException, MinimumQuestionsException {	
 		gameSpy.setPlayers(players);
 		GameRunner.play(gameSpy, randomMock);
 	}
 	
+	@Test(expected=MinimumQuestionsException.class)
+	public void a_game_without_questions_and_two_players() throws MinimumPlayersException, MinimumQuestionsException {
+		questions = new Questions();
+		questions.setNumberQuestions(0);
+		gameSpy.setQuestions(questions);
+		gameSpy.setPlayers(setUpPlayersToPlay(2));
+		GameRunner.play(gameSpy, randomMock);
+	}
+	
 	@Test(expected=MinimumPlayersException.class)
-	public void a_game_with_only_one_player() throws MinimumPlayersException {
+	public void a_game_with_only_one_player() throws MinimumPlayersException, MinimumQuestionsException {
 		
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
 		GameRunner.play(gameSpy, randomMock);
@@ -66,7 +82,7 @@ public class GameRunnerTest {
 	}
 	
 	@Test
-	public void a_game_with_two_players_first_answer_in_player_one_is_ko_rest_are_ok() throws MinimumPlayersException {
+	public void a_game_with_two_players_first_answer_in_player_one_is_ko_rest_are_ok() throws MinimumPlayersException, MinimumQuestionsException {
 
 		when(randomMock.nextInt(5)).thenReturn(0);
 		when(randomMock.nextInt(9)).thenReturn(7).thenReturn(1);
@@ -81,7 +97,7 @@ public class GameRunnerTest {
 	}
 	
 	@Test
-	public void a_game_with_3_players_all_answers_ok_and_player_one_has_6_gold_coins() throws MinimumPlayersException {
+	public void a_game_with_3_players_all_answers_ok_and_player_one_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {
 
 		Random randomSpy = spy (new Random());
 		when(randomSpy.nextInt(9)).thenReturn(1);
@@ -95,7 +111,7 @@ public class GameRunnerTest {
 	}
 	
 	@Test
-	public void a_game_with_3_players_some_answers_ok_and_player_two_has_6_gold_coins() throws MinimumPlayersException {
+	public void a_game_with_3_players_some_answers_ok_and_player_two_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {
 
 		Random randomSpy = spy (new Random());
 		when(randomSpy.nextInt(9)).thenReturn(7).thenReturn(1);
@@ -109,7 +125,7 @@ public class GameRunnerTest {
 	}
 	
 	@Test
-	public void a_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException {
+	public void a_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {
 
 		Random randomSpy = spy (new Random());
 		when(randomSpy.nextInt(9)).thenReturn(7).thenReturn(7).thenReturn(1);
@@ -124,7 +140,7 @@ public class GameRunnerTest {
 	
 
 	@Test
-	public void validate_scores_game_with_2_players_and_player_one_has_all_answers_ok_has_6_gold_coins() throws MinimumPlayersException {				
+	public void validate_scores_game_with_2_players_and_player_one_has_all_answers_ok_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {				
 		when(randomMock.nextInt(5)).thenReturn(0);
 		when(randomMock.nextInt(9)).thenReturn(2);
 		
@@ -137,7 +153,7 @@ public class GameRunnerTest {
 	}
 
 	@Test
-	public void validate_scores_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException {
+	public void validate_scores_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {
 		Random randomSpy = spy (new Random());
 		when(randomSpy.nextInt(9)).thenReturn(7).thenReturn(7).thenReturn(1);
 		

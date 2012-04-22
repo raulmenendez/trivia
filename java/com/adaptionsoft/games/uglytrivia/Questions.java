@@ -4,15 +4,23 @@ import java.util.LinkedList;
 
 public class Questions {
 
-	public LinkedList popQuestions = new LinkedList ();
-	public LinkedList scienceQuestions = new LinkedList ();
-	public LinkedList sportsQuestions = new LinkedList ();
-	public LinkedList rockQuestions = new LinkedList ();
-	private int numberQuestions = 0; 
+	public LinkedList<String> popQuestions = new LinkedList<String> ();
+	public LinkedList<String> scienceQuestions = new LinkedList<String> ();
+	public LinkedList<String> sportsQuestions = new LinkedList<String> ();
+	public LinkedList<String> rockQuestions = new LinkedList<String> ();
+	private int numberQuestions = 0;
 
-	public Questions(int questions){
-		numberQuestions = questions;
-		for (int i = 0; i < questions; i++) {
+	public void setNumberQuestions(int numberOfQuestions){
+		this.numberQuestions = numberOfQuestions;
+		createQuestions();
+	}
+	
+	public int getNumberQuestions(){
+		return numberQuestions;
+	}
+	
+	private void createQuestions(){
+		for (int i = 0; i < numberQuestions; i++) {
 			popQuestions.addLast(createQuestion(i,"Text.0")); //$NON-NLS-1$
 			scienceQuestions.addLast(createQuestion(i,"Text.1")); //$NON-NLS-1$
 			sportsQuestions.addLast(createQuestion(i,"Text.2")); //$NON-NLS-1$
@@ -35,9 +43,5 @@ public class Questions {
 			return rockQuestions.removeFirst().toString();
 		else 
 			return "";
-	}
-	
-	public int getNumberQuestions(){
-		return numberQuestions;
-	}
+	}	
 }

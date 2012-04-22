@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import com.adaptionsoft.games.uglytrivia.Game;
 import com.adaptionsoft.games.uglytrivia.Players;
+import com.adaptionsoft.games.uglytrivia.Questions;
 
 public class GameTest {
 
@@ -24,11 +25,15 @@ public class GameTest {
 	private Game gameSpy;
 	private Random randomMock;
 	private Players players;
+	private Questions questions;
 	
 	@Before
 	public void setUp() throws Exception {
 		randomMock = mock(Random.class);
 		gameSpy = spy(new Game());
+		questions = new Questions();
+		questions.setNumberQuestions(50);
+		gameSpy.setQuestions(questions);
 		outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		players = new Players(); 
@@ -41,7 +46,7 @@ public class GameTest {
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
 		
 		int roll = gameSpy.rollTheDice(randomMock);
-		gameSpy.roll(roll);
+		gameSpy.turn(roll);
 		
 		assertEquals(false,gameSpy.isPlayerInThePenaltyBox());
 		verify(gameSpy,times(0)).isPlayerGettingOutFromPenaltyBox(roll);
@@ -53,10 +58,11 @@ public class GameTest {
 		
 		when(randomMock.nextInt(5)).thenReturn(0);
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
+		gameSpy.setQuestions(questions);
 		
 		gameSpy.wrongAnswer();		
 		int roll = gameSpy.rollTheDice(randomMock);		
-		gameSpy.roll(roll);
+		gameSpy.turn(roll);
 		
 		assertEquals(true,gameSpy.isPlayerInThePenaltyBox());		
 		verify(gameSpy,times(1)).isPlayerGettingOutFromPenaltyBox(roll);
@@ -72,7 +78,7 @@ public class GameTest {
 		gameSpy.wrongAnswer();
 		int roll = gameSpy.rollTheDice(randomMock);
 		
-		gameSpy.roll(roll);
+		gameSpy.turn(roll);
 		
 		assertEquals(true,gameSpy.isPlayerInThePenaltyBox());		
 		verify(gameSpy,times(1)).isPlayerGettingOutFromPenaltyBox(roll);

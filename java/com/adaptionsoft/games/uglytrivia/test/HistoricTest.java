@@ -6,8 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
-
-import org.junit.Before;
 import org.junit.Test;
 
 import com.adaptionsoft.games.uglytrivia.Historic;

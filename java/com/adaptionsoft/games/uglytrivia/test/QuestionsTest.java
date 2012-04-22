@@ -14,7 +14,8 @@ public class QuestionsTest {
 	
 	@Before
 	public void SetUp(){
-		questions = new Questions(50);
+		questions = new Questions();
+		questions.setNumberQuestions(50);
 	}
 	
 	@Test

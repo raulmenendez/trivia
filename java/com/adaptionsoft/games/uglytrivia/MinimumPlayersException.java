@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.trivia.runner;
+package com.adaptionsoft.games.uglytrivia;
 
 public class MinimumPlayersException extends Exception {
 	

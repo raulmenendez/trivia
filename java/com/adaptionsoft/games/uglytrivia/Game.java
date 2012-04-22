@@ -3,17 +3,20 @@ package com.adaptionsoft.games.uglytrivia;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Game {
-	
 
-	Questions questions = new Questions(50);
+
+public class Game {	
+
+	Questions questions;
     Players players;
     private HashMap<String, Integer> playersScores = new HashMap<String, Integer>();
 	int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
-	public boolean isPlayable() {
-		return (players.howManyPlayers() >= 2);
+	public boolean isPlayable() throws MinimumPlayersException, MinimumQuestionsException {
+		if (players.howManyPlayers() < 2) throw new MinimumPlayersException();
+		if (questions.getNumberQuestions() < 2) throw new MinimumQuestionsException();
+		return true;
 	}
 
 	public int rollTheDice(Random dice){
@@ -28,7 +31,7 @@ public class Game {
 		return (roll % 2 != 0);
 	}
 
-	public void roll(int diceResult) {
+	public void turn(int diceResult) {
 		
 		if (isPlayerInThePenaltyBox()){
 			if (isPlayerGettingOutFromPenaltyBox(diceResult)){				
@@ -131,5 +134,7 @@ public class Game {
 		return this.playersScores.get(player).intValue();
 	}
 	
-	
+	public void setQuestions(Questions questions){
+		this.questions = questions;
+	}
 }
