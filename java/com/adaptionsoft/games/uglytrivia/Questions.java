@@ -33,13 +33,13 @@ public class Questions {
 	}		
 
 	public String askQuestion(String currentCategory) {
-		if (currentCategory == Messages.getString("Text.14")) //$NON-NLS-1$
+		if (currentCategory.equals(Messages.getString("Text.14"))) //$NON-NLS-1$
 			return popQuestions.removeFirst().toString();
-		else if (currentCategory == Messages.getString("Text.15")) //$NON-NLS-1$
+		else if (currentCategory.equals(Messages.getString("Text.15"))) //$NON-NLS-1$
 				return scienceQuestions.removeFirst().toString();
-		else if (currentCategory == Messages.getString("Text.16")) //$NON-NLS-1$
+		else if (currentCategory.equals(Messages.getString("Text.16"))) //$NON-NLS-1$
 			return sportsQuestions.removeFirst().toString();
-		else if (currentCategory == Messages.getString("Text.17")) //$NON-NLS-1$
+		else if (currentCategory.equals(Messages.getString("Text.17"))) //$NON-NLS-1$
 			return rockQuestions.removeFirst().toString();
 		else 
 			return "";

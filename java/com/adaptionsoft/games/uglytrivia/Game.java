@@ -13,8 +13,8 @@ public class Game {
 	int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
-	public boolean isPlayable() throws MinimumPlayersException, MinimumQuestionsException {
-		if (players.howManyPlayers() < 2) throw new MinimumPlayersException();
+	public boolean isPlayable() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
+		if (players.getNumberOfPlayers() < 2) throw new MinimumPlayersException();
 		if (questions.getNumberQuestions() < 2) throw new MinimumQuestionsException();
 		return true;
 	}
@@ -76,9 +76,10 @@ public class Game {
 		return Messages.getString("Text.17"); //$NON-NLS-1$
 	}
 
-	private boolean winnerTreatment(){
+	private boolean hasPlayerWon(){
 		System.out.println(Messages.getString("Text.29")); //$NON-NLS-1$
 		players.getPurses()[currentPlayer]++;
+		//players.addPurseTo(currentPlayer);
 		System.out.println(players.getPlayers().get(currentPlayer) 
 				+ Messages.getString("Text.30") //$NON-NLS-1$
 				+ players.getPurses()[currentPlayer]
@@ -86,14 +87,16 @@ public class Game {
 		
 		playersScores.put(players.getPlayers().get(currentPlayer),players.getPurses()[currentPlayer]);
 		
-		boolean winner = players.didPlayerWin(currentPlayer);
-		currentPlayer = nextPlayerToPlay();
-		return winner;
+		boolean hasPlayerWon = players.didPlayerWin(currentPlayer);
+		if (!hasPlayerWon){
+			currentPlayer = nextPlayerToPlay();
+		}
+		return hasPlayerWon;
 	}
 
 	private int nextPlayerToPlay() {
 		currentPlayer++;
-		if (currentPlayer == players.howManyPlayers()){ 
+		if (currentPlayer == players.getNumberOfPlayers()){ 
 			currentPlayer = 0;
 		}
 		return currentPlayer;
@@ -102,13 +105,13 @@ public class Game {
 	public boolean wasCorrectlyAnswered() {
 		if (players.getInPenaltyBox()[currentPlayer]){
 			if (isGettingOutOfPenaltyBox) {
-				return winnerTreatment();
+				return hasPlayerWon();
 			} else {
 				currentPlayer = nextPlayerToPlay();
-				return true;
+				return false;
 			}			
 		} else {				
-			return winnerTreatment();
+			return hasPlayerWon();
 		}
 	}
 	
@@ -119,7 +122,7 @@ public class Game {
 		
 		currentPlayer++;
 		if (currentPlayer == players.getPlayers().size()) currentPlayer = 0;
-		return true;
+		return false;
 	}
     
 	public void setPlayers(Players players) {

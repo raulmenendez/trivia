@@ -20,6 +20,7 @@ import org.junit.Test;
 import com.adaptionsoft.games.trivia.runner.GameRunner;
 import com.adaptionsoft.games.uglytrivia.Game;
 import com.adaptionsoft.games.uglytrivia.Historic;
+import com.adaptionsoft.games.uglytrivia.MaximumPlayersExcededException;
 import com.adaptionsoft.games.uglytrivia.MinimumPlayersException;
 import com.adaptionsoft.games.uglytrivia.MinimumQuestionsException;
 import com.adaptionsoft.games.uglytrivia.Players;
@@ -59,13 +60,13 @@ public class GameRunnerTest {
 	}
 	
 	@Test(expected=MinimumPlayersException.class)
-	public void a_game_with_no_players_at_all() throws MinimumPlayersException, MinimumQuestionsException {	
+	public void a_game_with_no_players_at_all() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {	
 		gameSpy.setPlayers(players);
 		GameRunner.play(gameSpy, randomMock);
 	}
 	
 	@Test(expected=MinimumQuestionsException.class)
-	public void a_game_without_questions_and_two_players() throws MinimumPlayersException, MinimumQuestionsException {
+	public void a_game_without_questions_and_two_players() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 		questions = new Questions();
 		questions.setNumberQuestions(0);
 		gameSpy.setQuestions(questions);
@@ -74,15 +75,23 @@ public class GameRunnerTest {
 	}
 	
 	@Test(expected=MinimumPlayersException.class)
-	public void a_game_with_only_one_player() throws MinimumPlayersException, MinimumQuestionsException {
+	public void a_game_with_only_one_player() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 		
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
 		GameRunner.play(gameSpy, randomMock);
 		
 	}
 	
+	@Test(expected=MaximumPlayersExcededException.class)
+	public void a_game_with_more_players_than_maximum_allowed() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
+		
+		gameSpy.setPlayers(setUpPlayersToPlay(7));
+		
+	}	
+	
+	
 	@Test
-	public void a_game_with_two_players_first_answer_in_player_one_is_ko_rest_are_ok() throws MinimumPlayersException, MinimumQuestionsException {
+	public void a_game_with_two_players_first_answer_in_player_one_is_ko_rest_are_ok() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 
 		when(randomMock.nextInt(5)).thenReturn(0);
 		when(randomMock.nextInt(9)).thenReturn(7).thenReturn(1);
@@ -97,7 +106,7 @@ public class GameRunnerTest {
 	}
 	
 	@Test
-	public void a_game_with_3_players_all_answers_ok_and_player_one_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {
+	public void a_game_with_3_players_all_answers_ok_and_player_one_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 
 		Random randomSpy = spy (new Random());
 		when(randomSpy.nextInt(9)).thenReturn(1);
@@ -111,7 +120,7 @@ public class GameRunnerTest {
 	}
 	
 	@Test
-	public void a_game_with_3_players_some_answers_ok_and_player_two_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {
+	public void a_game_with_3_players_some_answers_ok_and_player_two_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 
 		Random randomSpy = spy (new Random());
 		when(randomSpy.nextInt(9)).thenReturn(7).thenReturn(1);
@@ -125,7 +134,7 @@ public class GameRunnerTest {
 	}
 	
 	@Test
-	public void a_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {
+	public void a_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 
 		Random randomSpy = spy (new Random());
 		when(randomSpy.nextInt(9)).thenReturn(7).thenReturn(7).thenReturn(1);
@@ -140,7 +149,7 @@ public class GameRunnerTest {
 	
 
 	@Test
-	public void validate_scores_game_with_2_players_and_player_one_has_all_answers_ok_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {				
+	public void validate_scores_game_with_2_players_and_player_one_has_all_answers_ok_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {				
 		when(randomMock.nextInt(5)).thenReturn(0);
 		when(randomMock.nextInt(9)).thenReturn(2);
 		
@@ -153,7 +162,7 @@ public class GameRunnerTest {
 	}
 
 	@Test
-	public void validate_scores_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException {
+	public void validate_scores_game_with_3_players_some_answers_ok_and_player_three_has_6_gold_coins() throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 		Random randomSpy = spy (new Random());
 		when(randomSpy.nextInt(9)).thenReturn(7).thenReturn(7).thenReturn(1);
 		
@@ -165,7 +174,7 @@ public class GameRunnerTest {
 	}
 
 	
-	private Players setUpPlayersToPlay(int numberOfPlayers){
+	private Players setUpPlayersToPlay(int numberOfPlayers) throws MaximumPlayersExcededException{
 		for (int player=1;player<=numberOfPlayers;player++){
 			players.addPlayer("Player".concat(String.valueOf(player)));
 		}

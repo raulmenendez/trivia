@@ -44,7 +44,7 @@ public class Historic implements Serializable{
 	        Iterator<Entry<String, Integer>> it = historicInfo.entrySet().iterator();
 			while (it.hasNext()) {
 				Entry<String, Integer> e = it.next();
-				System.out.println("Jugador " + e.getKey() + " " + "con resultado " + (Integer)e.getValue());
+				System.out.println("Jugador " + e.getKey() + " " + "con resultado " + e.getValue());
 			}
 		}		
 	}	
@@ -64,6 +64,7 @@ public class Historic implements Serializable{
 	        historic=(Historic)entrada.readObject();
 	        historic.printResults();
 		}catch (FileNotFoundException ex){
+			System.out.println(ex);
 			createSerialized();
 		}catch (IOException ex) {
 	        System.out.println(ex);

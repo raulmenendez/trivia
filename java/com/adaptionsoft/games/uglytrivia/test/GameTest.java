@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.MaximumPlayersExcededException;
 import com.adaptionsoft.games.uglytrivia.Players;
 import com.adaptionsoft.games.uglytrivia.Questions;
 
@@ -40,7 +41,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void ask_question_and_user_is_out_of_penalty_box() {
+	public void ask_question_and_user_is_out_of_penalty_box() throws MaximumPlayersExcededException {
 		
 		when(randomMock.nextInt(5)).thenReturn(0);		
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
@@ -54,7 +55,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void ask_question_and_user_is_in_the_penalty_box_but_goes_out() {
+	public void ask_question_and_user_is_in_the_penalty_box_but_goes_out() throws MaximumPlayersExcededException {
 		
 		when(randomMock.nextInt(5)).thenReturn(0);
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
@@ -71,7 +72,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void ask_question_and_user_is_in_the_penalty_box_and_fails_to_be_out() {
+	public void ask_question_and_user_is_in_the_penalty_box_and_fails_to_be_out() throws MaximumPlayersExcededException {
 		
 		when(randomMock.nextInt(5)).thenReturn(1);
 		gameSpy.setPlayers(setUpPlayersToPlay(1));
@@ -88,7 +89,7 @@ public class GameTest {
 		
 	}
 		
-	private Players setUpPlayersToPlay(int numberOfPlayers){
+	private Players setUpPlayersToPlay(int numberOfPlayers) throws MaximumPlayersExcededException{
 		for (int player=1;player<=numberOfPlayers;player++){
 			players.addPlayer("Player".concat(String.valueOf(player)));
 		}

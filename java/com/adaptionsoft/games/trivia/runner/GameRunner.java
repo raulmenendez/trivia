@@ -3,15 +3,16 @@ package com.adaptionsoft.games.trivia.runner;
 import java.util.Random;
 
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.MaximumPlayersExcededException;
 import com.adaptionsoft.games.uglytrivia.MinimumPlayersException;
 import com.adaptionsoft.games.uglytrivia.MinimumQuestionsException;
 
 
 public class GameRunner {
 
-	private static boolean notAWinner;
+	private static boolean winnerPlayer;
 
-	public static void play(Game game, Random rand) throws MinimumPlayersException, MinimumQuestionsException {
+	public static void play(Game game, Random rand) throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 
 		if (isGamePlayable(game)){ 
 			playGame(game, rand);
@@ -26,15 +27,15 @@ public class GameRunner {
 			game.turn(diceValue);
 			
 			if (isACorrectAnswerExpected(rand)) {
-				notAWinner = game.wasCorrectlyAnswered();
+				winnerPlayer = game.wasCorrectlyAnswered();
 			} else {
-				notAWinner = game.wrongAnswer();				
+				winnerPlayer = game.wrongAnswer();				
 			}
 						
-		} while (gameIsNotFinished());
+		} while (!isGameFinished());
 	}
 
-	private static boolean isGamePlayable(Game game) throws MinimumPlayersException, MinimumQuestionsException {
+	private static boolean isGamePlayable(Game game) throws MinimumPlayersException, MinimumQuestionsException, MaximumPlayersExcededException {
 		return game.isPlayable();
 	}
 
@@ -42,8 +43,8 @@ public class GameRunner {
 		return rand.nextInt(9) != 7;
 	}
 	
-	private static boolean gameIsNotFinished() {		
-		return notAWinner;
+	private static boolean isGameFinished() {		
+		return winnerPlayer;
 	}
 	
 }
